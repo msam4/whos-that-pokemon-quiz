@@ -32,6 +32,10 @@ body {
   cursor: pointer;
 }
 
+#start:hover {
+  font-weight: bold;
+}
+
 .game-container {
   background-color: #ffffff;
   width: 100%;
