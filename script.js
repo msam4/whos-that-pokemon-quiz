@@ -151,6 +151,7 @@ const timerDisplay = () => {
     count -= 1;
     timer.innerHTML = `<span>Time Left: ${count} s</span>`;
     if(count == 0) {
+      clearInterval(countdown);
       nextQuestion();
     }
   }, 1000);
@@ -188,6 +189,43 @@ const populateQuestions = () => {
     };
   };
   return questionsBatch;
+};
+
+// Check selected answer
+const checker = (event) => {
+  let userSolution = event.target.innerText;
+  let options = document.querySelectorAll(".option");
+  if (userSolution === finalQuestions[currentQuestion].correct_option) {
+    event.target.classList.add("correct");
+    score++;
+  } else {
+    event.target.classList.add("incorrect");
+    options.forEach((element) => {
+      if (element.innerText == finalQuestions[currentQuestion].correct_option) {
+        element.classList.add("correct");
+      }
+    });
+  }
+  clearInterval(countdown);
+  //disable all options
+  options.forEach((element) => {
+    element.disabled = true;
+  });
+};
+
+// Next question
+const nextQuestion = (event) => {
+  //increment currentQuestion
+  currentQuestion += 1;
+  if(currentQuestion == finalQuestions.length) {
+    gameContainer.classList.add("hide");
+    scoreContainer.classList.remove("hide");
+    startButton.innerText = `Restart`;
+    userScore.innerHTML = `Your score is ${score} out of ${currentQuestion}`;
+    clearInterval(countdown);
+  } else {
+    cardGenerator(finalQuestions[currentQuestion]);
+  }
 };
 
 // Card UI
