@@ -4,67 +4,67 @@
 
 const questions = [
   {
-    image: "Alakazam.jpg",
+    image: "images/Alakazam.jpg",
     correct_option: "Alakazam",
   },
   {
-    image: "Arcanine.jpg",
+    image: "images/Arcanine.jpg",
     correct_option: "Arcanine",
   },
   {
-    image: "Bulbasaur.jpg",
+    image: "images/Bulbasaur.jpg",
     correct_option: "Bulbasaur",
   },
   {
-    image: "Cubone.jpg",
+    image: "images/Cubone.jpg",
     correct_option: "Cubone",
   },
   {
-    image: "Ditto.jpg",
+    image: "images/Ditto.jpg",
     correct_option: "Ditto",
   },
   {
-    image: "Gloom.jpg",
+    image: "images/Gloom.jpg",
     correct_option: "Gloom",
   },
   {
-    image: "Gyarados.jpg",
+    image: "images/Gyarados.jpg",
     correct_option: "Gyarados",
   },
   {
-    image: "Hitmonlee.jpg",
+    image: "images/Hitmonlee.jpg",
     correct_option: "Hitmonlee",
   },
   {
-    image: "Horsea.jpg",
+    image: "images/Horsea.jpg",
     correct_option: "Horsea",
   },
   {
-    image: "Koffing.jpg",
+    image: "images/Koffing.jpg",
     correct_option: "Koffing",
   },
   {
-    image: "Mewtwo.jpg",
+    image: "images/Mewtwo.jpg",
     correct_option: "Mewtwo",
   },
   {
-    image: "Seaking.jpg",
+    image: "images/Seaking.jpg",
     correct_option: "Seaking",
   },
   {
-    image: "Tauros.jpg",
+    image: "images/Tauros.jpg",
     correct_option: "Tauros",
   },
   {
-    image: "Venonat.jpg",
+    image: "images/Venonat.jpg",
     correct_option: "Venonat",
   },
   {
-    image: "Victreebe.jpg",
+    image: "images/Victreebe.jpg",
     correct_option: "Victreebe",
   },
   {
-    image: "eevee.jpg",
+    image: "images/eevee.jpg",
     correct_option: "Eevee",
   },
 ];
@@ -127,7 +127,7 @@ let countdown,
 
 // Random value from array
 const randomValueGenerator = (array) =>
-  arrary[Math.floor(Math.random() * array.length)];
+  array[Math.floor(Math.random() * array.length)];
 
 // Random shuffle array
 const randomShuffle = (array) => array.sort(() => 0.5 - Math.random());
@@ -155,3 +155,73 @@ const timerDisplay = () => {
     }
   }, 1000);
 };
+
+// Create options
+const populateOptions = (correct_option) => {
+  let arr = [];
+  arr.push(correct_option);
+  let optionsCount = 1;
+  while(optionsCount < 4) {
+    let randomvalue = randomValueGenerator(optionsArray);
+    if(!arr.includes(randomvalue)){
+      arr.push(randomvalue);
+      optionsCount += 1;
+    };
+  };
+  return arr;
+};
+
+// Choose random questions
+const populateQuestions = () => {
+  let questionsCount = 0;
+  let chosenObjects = [];
+  let questionsBatch = [];
+
+  // 5 Questions
+  while(questionsCount < 5) {
+    let randomvalue = randomValueGenerator(questions);
+    let index = questions.indexOf(randomvalue);
+    if(!chosenObjects.includes(index)) {
+      questionsBatch.push(randomvalue);
+      chosenObjects.push(index);
+      questionsCount += 1;
+    };
+  };
+  return questionsBatch;
+};
+
+// Card UI
+const cardGenerator = (cardObject) => {
+  const { image, correct_option } = cardObject;
+  let options = randomShuffle(populateOptions(correct_option));
+  container.innerHTML = `<div class="quiz">
+                          <p class="num">
+                          ${currentQuestion + 1}/5
+                          </p>
+                          <div class="questions">
+                            <img class="pokemon-image" src="${image}"/>
+                          </div>
+                            <div class="options">
+                            <button class="option" onclick="checker(event)">${options[0]}
+                            </button>
+                            <button class="option" onclick="checker(event)">${options[1]}
+                            </button>
+                            <button class="option" onclick="checker(event)">${options[2]}
+                            </button>
+                            <button class="option" onclick="checker(event)">${options[3]}
+                            </button>
+                            </div>
+                            <div class="nxt-btn-div">
+                                <button class="next-btn" onclick="nextQuestion(event)">Next</button>
+                            </div>
+                          </div>`;
+
+  // For timer
+  count = 11;
+  clearInterval(countdown);
+
+  //Display timer
+  timerDisplay();
+};
+
+startButton.addEventListener("click", startGame);
